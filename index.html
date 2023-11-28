@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Book Search</title>
+    <title>Book Search</title>
+    <style>
+        .book {
+            margin-bottom: 20px;
+        }
+        .book img {
+            max-width: 100px;
+            max-height: 150px;
+            vertical-align: middle;
+        }
+        .book-info {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Book Search Without API Key</h1>
+    <h1>Book Search</h1>
     <input type="text" id="searchQuery" placeholder="Enter book title or author" />
     <button onclick="searchBooks()">Search</button>
     <div id="books"></div>
@@ -23,9 +38,22 @@
                     booksDiv.innerHTML = ''; // Clear previous results
                     if (data.totalItems > 0) {
                         data.items.forEach(item => {
+                            var book = document.createElement('div');
+                            book.className = 'book';
+
+                            var image = item.volumeInfo.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'placeholder.jpg';
                             var title = item.volumeInfo.title;
                             var authors = item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown Author';
-                            booksDiv.innerHTML += `<p><strong>${title}</strong> by ${authors}</p>`;
+
+                            book.innerHTML = `
+                                <img src="${image}" alt="${title}" />
+                                <div class="book-info">
+                                    <p><strong>Title:</strong> ${title}</p>
+                                    <p><strong>Author:</strong> ${authors}</p>
+                                </div>
+                            `;
+
+                            booksDiv.appendChild(book);
                         });
                     } else {
                         booksDiv.innerHTML = '<p>No results found.</p>';
@@ -33,7 +61,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('books').innerHTML = '<p>An error occurred while searching.</p>';
+                    booksDiv.innerHTML = '<p>An error occurred while searching.</p>';
                 });
         }
     </script>
