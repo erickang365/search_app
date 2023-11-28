@@ -38,15 +38,15 @@
           <div class="modal-header">
             <h5 class="modal-title" id="modalTitle"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">닫기</span>
             </button>
           </div>
           <div class="modal-body" id="modalBody">
             <!-- Book details will be appended here -->
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <a href="" id="coupangLink" target="_blank" class="btn btn-primary">Buy on Coupang</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            <a href="" id="coupangLink" target="_blank" class="btn btn-primary">구매하기</a>
           </div>
         </div>
       </div>
@@ -68,18 +68,20 @@
                     var books = data.items || [];
                     var output = '';
                     books.forEach(book => {
-                        output += `
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <img src="${book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : 'No cover image available'}" class="card-img-top book-detail-button" alt="Book cover" data-toggle="modal" data-target="#bookDetailModal" data-book-id="${book.id}">
-                                    <div class="card-body">
-                                        <h5 class="card-title book-detail-button" data-toggle="modal" data-target="#bookDetailModal" data-book-id="${book.id}">${book.volumeInfo.title}</h5>
-                                        <p class="card-text">Author: ${(book.volumeInfo.authors || []).join(', ')}</p>
-                                        <p class="card-text">Publisher: ${book.volumeInfo.publisher || 'Not available'}</p>
+                        if(book.volumeInfo.imageLinks) {
+                            output += `
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <img src="${book.volumeInfo.imageLinks.thumbnail}" class="card-img-top book-detail-button" alt="Book cover" data-toggle="modal" data-target="#bookDetailModal" data-book-id="${book.id}">
+                                        <div class="card-body">
+                                            <h5 class="card-title book-detail-button" data-toggle="modal" data-target="#bookDetailModal" data-book-id="${book.id}">${book.volumeInfo.title}</h5>
+                                            <p class="card-text">Author: ${(book.volumeInfo.authors || []).join(', ')}</p>
+                                            <p class="card-text">Publisher: ${book.volumeInfo.publisher || 'Not available'}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
+                        }
                     });
                     document.getElementById('results').innerHTML = output;
 
@@ -103,7 +105,7 @@
                 .then(response => response.json())
                 .then(book => {
                     document.getElementById('modalTitle').innerText = book.volumeInfo.title;
-                    document.getElementById('modalBody').innerHTML = `<img src="${book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : 'No cover image available'}" class="card-img-top" alt="Book cover">
+                    document.getElementById('modalBody').innerHTML = `<img src="${book.volumeInfo.imageLinks.thumbnail}" class="card-img-top" alt="Book cover">
                     <p><strong>Title:</strong> ${book.volumeInfo.title}</p>
                     <p><strong>Author:</strong> ${(book.volumeInfo.authors || []).join(', ')}</p>
                     <p><strong>Description:</strong> ${(book.volumeInfo.description || 'No description available').substring(0, 50)}</p>`;
