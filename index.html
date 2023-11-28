@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search App</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* 여기에 CSS 스타일을 추가할 수 있습니다 */
+        /* 여기에 추가적인 CSS 스타일을 추가할 수 있습니다 */
     </style>
 </head>
-<body>
-    <h1>Book Search App</h1>
-    <input type="text" id="searchQuery" placeholder="Enter book title or author" />
-    <button onclick="searchBooks()">Search</button>
-    <div id="results"></div>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Book Search App</h1>
+        <div class="input-group mb-3">
+            <input type="text" id="searchQuery" class="form-control" placeholder="Enter book title or author" aria-label="Enter book title or author" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="searchBooks()">Search</button>
+            </div>
+        </div>
+        <div id="results"></div>
+    </div>
 
     <script>
         function searchBooks() {
@@ -23,25 +31,30 @@
                 .then(response => response.json())
                 .then(data => {
                     var books = data.items || [];
-                    var output = '<ul>';
+                    var output = '<div class="list-group">';
                     books.forEach(book => {
                         output += `
-                            <li>
-                                <h2>${book.volumeInfo.title}</h2>
-                                <p>Author: ${(book.volumeInfo.authors || []).join(', ')}</p>
-                                <p>Publisher: ${book.volumeInfo.publisher || 'Not available'}</p>
-                                <img src="${book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : ''}" alt="Book cover">
-                            </li>
+                            <a href="${book.volumeInfo.previewLink}" class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">${book.volumeInfo.title}</h5>
+                                </div>
+                                <p class="mb-1">Author: ${(book.volumeInfo.authors || []).join(', ')}</p>
+                                <small>Publisher: ${book.volumeInfo.publisher || 'Not available'}</small>
+                            </a>
                         `;
                     });
-                    output += '</ul>';
+                    output += '</div>';
                     document.getElementById('results').innerHTML = output;
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('results').innerHTML = 'An error occurred while fetching book data.';
+                    document.getElementById('results').innerHTML = '<p class="text-danger">An error occurred while fetching book data.</p>';
                 });
         }
     </script>
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.11/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
