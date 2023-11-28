@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Book Search</title>
+</head>
+<body>
+    <h1>Book Search Without API Key</h1>
+    <input type="text" id="searchQuery" placeholder="Enter book title or author" />
+    <button onclick="searchBooks()">Search</button>
+    <div id="books"></div>
+
+    <script>
+        function searchBooks() {
+            var query = document.getElementById('searchQuery').value;
+            var url = 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(query);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var booksDiv = document.getElementById('books');
+                    booksDiv.innerHTML = ''; // Clear previous results
+                    if (data.totalItems > 0) {
+                        data.items.forEach(item => {
+                            var title = item.volumeInfo.title;
+                            var authors = item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown Author';
+                            booksDiv.innerHTML += `<p><strong>${title}</strong> by ${authors}</p>`;
+                        });
+                    } else {
+                        booksDiv.innerHTML = '<p>No results found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('books').innerHTML = '<p>An error occurred while searching.</p>';
+                });
+        }
+    </script>
+</body>
+</html>
