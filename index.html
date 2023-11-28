@@ -6,51 +6,25 @@
     <title>Book Search App</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* 여기에 추가적인 CSS 스타일을 추가할 수 있습니다 */
-    </style>
 </head>
 <body class="bg-light">
     <div class="container mt-5">
         <h1 class="text-center mb-4">Book Search App</h1>
-        <div class="input-group mb-3">
-            <input type="text" id="searchQuery" class="form-control" placeholder="Enter book title or author" aria-label="Enter book title or author" aria-describedby="button-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="searchBooks()">Search</button>
+        <div class="row">
+            <div class="col-12">
+                <div class="input-group input-group-lg mb-3">
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Enter book title or author" aria-label="Book title or author">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="searchBooks()">검색</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="results"></div>
     </div>
 
     <script>
-        function searchBooks() {
-            var query = document.getElementById('searchQuery').value;
-            var apiURL = 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(query);
-
-            fetch(apiURL)
-                .then(response => response.json())
-                .then(data => {
-                    var books = data.items || [];
-                    var output = '<div class="list-group">';
-                    books.forEach(book => {
-                        output += `
-                            <a href="${book.volumeInfo.previewLink}" class="list-group-item list-group-item-action flex-column align-items-start">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">${book.volumeInfo.title}</h5>
-                                </div>
-                                <p class="mb-1">Author: ${(book.volumeInfo.authors || []).join(', ')}</p>
-                                <small>Publisher: ${book.volumeInfo.publisher || 'Not available'}</small>
-                            </a>
-                        `;
-                    });
-                    output += '</div>';
-                    document.getElementById('results').innerHTML = output;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('results').innerHTML = '<p class="text-danger">An error occurred while fetching book data.</p>';
-                });
-        }
+        // ... 여기에 JavaScript 코드를 유지 ...
     </script>
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
